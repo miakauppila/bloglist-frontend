@@ -1,17 +1,19 @@
 import React, { useState, useImperativeHandle } from 'react'
+import PropTypes from 'prop-types'
 
 const Togglable = React.forwardRef((props, ref)  => {
   const [visible, setVisible] = useState(false)
 
-  // empty display value '' does not affect display
+  // empty display value '' does not affect display at all
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
 
+  // this fn will be accessed from outside with ref
   const toggleVisibility = () => {
     setVisible(!visible)
   }
 
-  // this hook makes toggleVisibility availabe via ref
+  // this hook makes toggleVisibility availabe in App.js via ref
   useImperativeHandle(ref, () => {
     return {
       toggleVisibility
@@ -30,5 +32,11 @@ const Togglable = React.forwardRef((props, ref)  => {
     </div>
   )
 })
+
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
+}
+
+Togglable.displayName = 'Togglable'
 
 export default Togglable

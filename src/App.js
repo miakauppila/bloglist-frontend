@@ -13,8 +13,10 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   // user is saved after login success
   const [user, setUser] = useState(null)
+  // used for linking with Togglable
   const blogFormRef = useRef()
 
+  // runs once
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -44,8 +46,8 @@ const App = () => {
       blogService.setToken(user.token)
       setMessage('Login success')
       setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+        setMessage(null)
+      }, 5000)
     } catch (exception) {
       setErrorMessage('wrong username or password')
       setTimeout(() => {
@@ -65,20 +67,67 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`);
+        console.log('blog created:', returnedBlog) // NO username!!
+        blogService.getAll().then(blogs =>
+          setBlogs(blogs)
+        )
+        setMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
         setTimeout(() => {
-          setMessage(null);
-        }, 5000);
+          setMessage(null)
+        }, 5000)
       })
       .catch((error) => {
-        console.log("Create new blog error:", error.response.data.error);
-        setErrorMessage('Please fill in blog data');
+        console.log('Create new blog error:', error.response.data.error)
+        setErrorMessage('Please fill in blog data')
         setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
-      });
+          setErrorMessage(null)
+        }, 5000)
+      })
   }
+
+  const updateBlog = (blogObject) => {
+    const changedBlog = { ...blogObject, likes: blogObject.likes+1 }
+    console.log('original', blogObject)
+    console.log('changed', changedBlog)
+    blogService
+      .update(blogObject.id, changedBlog)
+      .then(returnedBlog => { // likes have been increased
+        setBlogs(blogs.map(blog => blog.id !== returnedBlog.id ? blog : { ...blog, likes: returnedBlog.likes } ))
+        setMessage(`Likes of the blog ${returnedBlog.title} updated`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
+      .catch((error) => {
+        console.log('Update blog error:', error.response.data.error)
+        setErrorMessage('Sorry, adding likes failed.')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
+
+  const deleteBlog = (id) => {
+    blogService
+      .remove(id)
+      .then(() => {
+        setBlogs(blogs.filter((blog) => blog.id !== id))
+        setMessage('Blog was removed')
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      })
+      .catch((error) => {
+        console.log('Delete blog error:', error.response.data.error)
+        setErrorMessage('Sorry, remove failed.')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
+
+  // sort blogs by amount of likes
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   if (user === null) {
     return (
@@ -100,15 +149,15 @@ const App = () => {
       </div>
 
       <div>
-      <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
-        {/* NewBlogForm becomes the children of the Togglable */}
+        <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
+          {/* NewBlogForm becomes the children of Togglable */}
           <NewBlogForm createNewBlog={createNewBlog} />
-      </Togglable>
+        </Togglable>
       </div>
 
       <div className="blogList">
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+        {sortedBlogs.map(blog =>
+          <Blog key={blog.id} blog={blog} user={user} updateBlog={updateBlog} deleteBlog={deleteBlog} />
         )}
       </div>
 
