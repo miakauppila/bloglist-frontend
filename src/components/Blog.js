@@ -14,8 +14,8 @@ const Blog = ({ blog, user, updateBlog, deleteBlog }) => {
 
   if (!showBlog) {
     return (
-      <div>
-        {blog.title} <button onClick={() => setShowBlog(true)}>View</button>
+      <div className="blog">
+        {blog.title} {blog.author} <button onClick={() => setShowBlog(true)}>View</button>
       </div>
     )
   }
