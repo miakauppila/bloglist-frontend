@@ -49,7 +49,7 @@ const App = () => {
         setMessage(null)
       }, 5000)
     } catch (exception) {
-      setErrorMessage('wrong username or password')
+      setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -118,7 +118,7 @@ const App = () => {
         }, 5000)
       })
       .catch((error) => {
-        console.log('Delete blog error:', error.response.data.error)
+        console.log('Delete blog error:', error)
         setErrorMessage('Sorry, remove failed.')
         setTimeout(() => {
           setErrorMessage(null)
@@ -155,7 +155,7 @@ const App = () => {
         </Togglable>
       </div>
 
-      <div className="blogList">
+      <div className="blog-list">
         {sortedBlogs.map(blog =>
           <Blog key={blog.id} blog={blog} user={user} updateBlog={updateBlog} deleteBlog={deleteBlog} />
         )}
