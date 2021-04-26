@@ -67,7 +67,7 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        console.log('blog created:', returnedBlog) // NO username!!
+        console.log('blog created:', returnedBlog)
         blogService.getAll().then(blogs =>
           setBlogs(blogs)
         )
@@ -86,12 +86,18 @@ const App = () => {
   }
 
   const updateBlog = (blogObject) => {
-    const changedBlog = { ...blogObject, likes: blogObject.likes+1 }
+    const changedBlog = {
+      title: blogObject.title,
+      author: blogObject.author,
+      url: blogObject.url,
+      likes: blogObject.likes+1,
+      user: blogObject.user.id
+    }
     console.log('original', blogObject)
     console.log('changed', changedBlog)
     blogService
       .update(blogObject.id, changedBlog)
-      .then(returnedBlog => { // likes have been increased
+      .then(returnedBlog => { // likes have been increased but user has only id
         setBlogs(blogs.map(blog => blog.id !== returnedBlog.id ? blog : { ...blog, likes: returnedBlog.likes } ))
         setMessage(`Likes of the blog ${returnedBlog.title} updated`)
         setTimeout(() => {

@@ -25,8 +25,8 @@ describe('<NewBlogForm />', () => {
     const url = component.container.querySelector('#url')
     fireEvent.change(url, { target: { value: 'www.blog.com' } })
 
-    // use PrettyDom to print HTML to console => values should be filled
-    const div = component.container.querySelector('createBlogForm')
+    // use PrettyDom to print HTML to console => values should be filled now
+    const div = component.container.querySelector('.createBlogForm')
     console.log(prettyDOM(div))
 
     //fire event to submit the form with Create button

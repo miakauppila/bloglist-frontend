@@ -1,7 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
-import { prettyDOM } from '@testing-library/dom'
 import Blog from './Blog'
 
 describe('<Blog /> rendering', () => {
@@ -11,7 +10,7 @@ describe('<Blog /> rendering', () => {
     author: 'Writer',
     id: '606d73eb83a536049c715284',
     likes: 0,
-    title: 'One blog',
+    title: 'Test blog',
     url: 'www.test.com',
     user: {
       id: '603a295c51e3c2a93826367d',
@@ -36,32 +35,33 @@ describe('<Blog /> rendering', () => {
     // print HTML to console when needed
     //component.debug()
 
-    expect(component.container).toHaveTextContent(
-      'One blog Writer'
-    )
+    const visibleDiv = component.container.querySelector('.blog-header')
+    expect(visibleDiv).not.toHaveStyle('display: none')
 
-    expect(component.container).not.toHaveTextContent(
-      'www.test.com'
-    )
+    expect(visibleDiv).toHaveTextContent('Test blog Writer')
+    expect(visibleDiv).not.toHaveTextContent('www.test.com')
+    expect(visibleDiv).not.toHaveTextContent('likes 0')
 
-    expect(component.container).not.toHaveTextContent(
-      'likes'
-    )
+    const hidden = component.container.querySelector('.blog-details')
+    expect(hidden).toHaveStyle('display: none')
   })
 
   test('renders also url and likes after pressing the View button', () => {
 
+    // find & press the View button
     const button = component.getByText('View')
     fireEvent.click(button)
 
     // use PrettyDom to print HTML to console
-    // const ul = component.container.querySelector('ul')
-    // console.log(prettyDOM(ul))
+    //const blogUl = component.container.querySelector('ul')
+    //console.log(prettyDOM(blogUl))
 
-    const url = component.getByText('www.test.com')
-    expect(url).toBeDefined()
-    const likes = component.getByText('likes 0')
-    expect(likes).toBeDefined()
+    // should not be hidden after pressing View
+    const ul = component.container.querySelector('.blog-details')
+    expect(ul).not.toHaveStyle('display: none')
+
+    expect(ul).toHaveTextContent('www.test.com')
+    expect(ul).toHaveTextContent('likes 0')
   })
 
 })
