@@ -1,23 +1,43 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { setUserAction } from '../reducers/userReducer'
+import loginService from '../services/login'
+import { notificationAction } from '../reducers/notificationReducer'
 
-const LoginForm = ({ handleLogin }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch()
+
+  const handleLogin = async (event) => {
     event.preventDefault()
-    // send state values to props fn
-    handleLogin(username, password)
     setUsername('')
     setPassword('')
+    try {
+      const user = await loginService.login({
+        username, password
+      })
+      dispatch(setUserAction(user))
+      // store user in localStorage
+      window.localStorage.setItem(
+        'loggedBlogAppUser', JSON.stringify(user)
+      )
+      blogService.setToken(user.token)
+      dispatch(notificationAction('Login success', 'success'))
+    } catch (error) {
+      console.log(error.response.data)
+      dispatch(notificationAction('Wrong credentials', 'error'))
+    }
   }
 
   return (
     <div className="loginForm">
-      <form id="login" onSubmit={handleSubmit}>
+      <form id="login" onSubmit={handleLogin}>
         <div>
-            username
+        username
           <input
             type="text"
             value={username}
@@ -26,7 +46,7 @@ const LoginForm = ({ handleLogin }) => {
           />
         </div>
         <div>
-            password
+        password
           <input
             type="password"
             value={password}
