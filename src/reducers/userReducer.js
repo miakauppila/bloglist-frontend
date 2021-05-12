@@ -1,27 +1,31 @@
-const initialState = null
+import userService from '../services/users'
+import { notificationAction } from './notificationReducer'
+
+const initialState = []
 
 const userReducer = (state = initialState, action) => {
-  console.log(action)
   switch (action.type) {
-  case 'SET_USER':
+  case 'INIT_USERS':
     return action.payload
-  case 'REMOVE_USER':
-    return initialState
   default:
     return state
   }
 }
 
-export const setUserAction = (user) => {
-  return {
-    type: 'SET_USER',
-    payload: user
-  }
-}
-
-export const removeUserAction = () => {
-  return {
-    type: 'REMOVE_USER'
+// async action creator makes axios call
+export const initializeUsersAction = () => {
+  return async dispatch => {
+    try {
+      const users = await userService.getAll()
+      dispatch({
+        type: 'INIT_USERS',
+        payload: users
+      })
+    }
+    catch (exception) {
+      console.log(exception)
+      dispatch(notificationAction('Loading users failed, sorry!', 'error', 10))
+    }
   }
 }
 

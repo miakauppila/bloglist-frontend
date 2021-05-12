@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 import { useDispatch } from 'react-redux'
-import { setUserAction } from '../reducers/userReducer'
+import { setLoggedUserAction } from '../reducers/loggedReducer'
 import loginService from '../services/login'
 import { notificationAction } from '../reducers/notificationReducer'
 
@@ -20,7 +19,7 @@ const LoginForm = () => {
       const user = await loginService.login({
         username, password
       })
-      dispatch(setUserAction(user))
+      dispatch(setLoggedUserAction(user))
       // store user in localStorage
       window.localStorage.setItem(
         'loggedBlogAppUser', JSON.stringify(user)
@@ -58,10 +57,6 @@ const LoginForm = () => {
       </form>
     </div>
   )
-}
-
-LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired
 }
 
 export default LoginForm
