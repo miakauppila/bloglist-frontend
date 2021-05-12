@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { likeBlogAction, removeBlogAction } from '../reducers/blogReducer'
 import { notificationAction } from '../reducers/notificationReducer'
+import { useParams, useHistory } from 'react-router-dom'
+import Notification from './Notification'
 
-const Blog = ({ blog }) => {
-  //console.log('Blog renders', blog)
-  //console.log('user', user)
-  const [showBlogDetails, setShowBlogDetails] = useState(false)
-
+const Blog = () => {
 
   // Redux store: user saved after login success
   const user = useSelector(state => state.loggedUser)
+  // Redux store: blogs
+  const blogs = useSelector(state => state.blogs)
 
   const dispatch = useDispatch()
 
-  // empty display value '' does not affect display
-  const hideWhenVisible = { display: showBlogDetails ? 'none' : '' }
-  const showWhenVisible = { display: showBlogDetails ? '' : 'none' }
+  const blogId = useParams().id
+  const blog = blogs.find(blog => blog.id === blogId)
 
   const updateBlog = async (blogObject) => {
     const changedBlog = {
@@ -41,7 +40,7 @@ const Blog = ({ blog }) => {
     }
   }
 
-  const onRemoveHandler = async (blog) => {
+  const removeHandler = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       // when user chooses OK
       try {
@@ -56,20 +55,28 @@ const Blog = ({ blog }) => {
     }
   }
 
+  const history = useHistory()
+  const backHandler = () => {
+    history.push('/')
+  }
+
+  if (!blog) {
+    return null
+  }
+
   return (
     <div className="blog">
-      <div className="blog-header" style={hideWhenVisible} >
-        {blog.title} {blog.author} <button onClick={() => setShowBlogDetails(true)}>View</button>
-      </div>
-      <ul className="blog-details" style={showWhenVisible}>
-        <li>{blog.title} {blog.author} <button onClick={() => setShowBlogDetails(false)}>Hide</button></li>
-        <li>{blog.url}</li>
-        <li>likes {blog.likes} <button id="like-button" onClick={() => updateBlog(blog)}>Like</button></li>
-        <li>{blog.user.name}</li>
+      <Notification />
+      <h2>{blog.title} {blog.author}</h2>
+      <div className="blog-details">
+        <a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a>
+        <div>{blog.likes} likes <button id="like-button" onClick={() => updateBlog(blog)}>Like</button></div>
+        <div>added by {blog.user.name}</div>
         {blog.user.username === user.username ?
-          (<li> <button id="remove-button" onClick={() => onRemoveHandler(blog)}>Remove</button></li>)
+          (<div> <button id="remove-button" onClick={() => removeHandler(blog)}>Remove</button></div>)
           : null}
-      </ul>
+      </div>
+      <button id="back-button" onClick={backHandler}>Back</button>
     </div>
   )
 }

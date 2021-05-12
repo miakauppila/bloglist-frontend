@@ -1,17 +1,10 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { initializeUsersAction } from '../reducers/userReducer'
+import React from 'react'
+import { useSelector } from 'react-redux'
 
 const Users = () => {
-  const dispatch = useDispatch()
 
   // Redux store: users
   const users = useSelector(state => state.users)
-
-  // runs once to initialize users
-  useEffect(() => {
-    dispatch(initializeUsersAction())
-  }, [dispatch])
 
   return (
     <div>

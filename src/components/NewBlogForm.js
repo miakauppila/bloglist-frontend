@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import blogService from '../services/blogs'
+import { createBlogAction } from '../reducers/blogReducer'
+import { notificationAction } from '../reducers/notificationReducer'
 
-const NewBlogForm = ({ createNewBlog }) => {
-
+const NewBlogForm = (props) => {
   const [newBlog, setNewBlog] = useState({
     title: '',
     author: '',
@@ -12,23 +15,35 @@ const NewBlogForm = ({ createNewBlog }) => {
     setNewBlog({ ...newBlog, [event.target.name]: event.target.value })
   }
 
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch()
+
+  const handleCreateNew = async (event) => {
     console.log('handleSubmit')
     event.preventDefault()
-    // send blog object to createNewBlog props function
-    createNewBlog(newBlog)
     setNewBlog({
       title: '',
       author: '',
       url: ''
     })
+    try {
+      const createdBlog = await blogService.create(newBlog)
+      console.log('blog created:', createdBlog)
+      dispatch(createBlogAction(createdBlog))
+      // access Togglable function via ref
+      props.togglableRef.current.toggleVisibility()
+      dispatch(notificationAction(`A new blog ${createdBlog.title} by ${createdBlog.author} added`, 'success'))
+    }
+    catch (error) {
+      console.log('Create new blog error:', error)
+      dispatch(notificationAction('Please fill in complete blog data', 'error'))
+    }
   }
 
   return (
     <div>
       <h2>Create new</h2>
       <div className="createBlogForm">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleCreateNew}>
           <div>
                     title
             <input
