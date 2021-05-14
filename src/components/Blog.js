@@ -5,6 +5,8 @@ import { likeBlogAction, removeBlogAction } from '../reducers/blogReducer'
 import { notificationAction } from '../reducers/notificationReducer'
 import { useParams, useHistory } from 'react-router-dom'
 import Notification from './Notification'
+import { Table, Button } from 'react-bootstrap'
+
 
 const Blog = () => {
 
@@ -34,9 +36,9 @@ const Blog = () => {
       dispatch(likeBlogAction(likedBlog))
       dispatch(notificationAction(`Likes of the blog ${likedBlog.title} updated`, 'success'))
     }
-    catch(error) {
+    catch (error) {
       console.log('Update blog error:', error)
-      dispatch(notificationAction('Sorry, adding likes failed.', 'error'))
+      dispatch(notificationAction('Sorry, adding likes failed.', 'danger'))
     }
   }
 
@@ -47,10 +49,11 @@ const Blog = () => {
         await blogService.remove(blog.id)
         dispatch(removeBlogAction(blog.id))
         dispatch(notificationAction('Blog was removed', 'success'))
+        history.push('/')
       }
-      catch(error) {
+      catch (error) {
         console.log('Delete blog error:', error)
-        dispatch(notificationAction('Sorry, remove failed.', 'error'))
+        dispatch(notificationAction('Sorry, remove failed.', 'danger'))
       }
     }
   }
@@ -66,17 +69,43 @@ const Blog = () => {
 
   return (
     <div className="blog">
+      <h2>{blog.title} by {blog.author}</h2>
       <Notification />
-      <h2>{blog.title} {blog.author}</h2>
-      <div className="blog-details">
-        <a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a>
-        <div>{blog.likes} likes <button id="like-button" onClick={() => updateBlog(blog)}>Like</button></div>
-        <div>added by {blog.user.name}</div>
-        {blog.user.username === user.username ?
-          (<div> <button id="remove-button" onClick={() => removeHandler(blog)}>Remove</button></div>)
-          : null}
-      </div>
-      <button id="back-button" onClick={backHandler}>Back</button>
+      <Table className="blog-table">
+        <tbody>
+          <tr>
+            <th>Title:</th>
+            <td>{blog.title}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <th>Author:</th>
+            <td>{blog.author}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <th>Url:</th>
+            <td><a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th>Likes:</th>
+            <td>{blog.likes}</td>
+            <td><Button variant="outline-success" id="like-button" onClick={() => updateBlog(blog)}><i className="bi bi-heart-fill"></i> Like</Button></td>
+          </tr>
+          <tr>
+            <th>Added by:</th>
+            <td>
+              {blog.user.name}
+            </td>
+            <td>{blog.user.username === user.username ?
+              (<Button variant="outline-primary" id="remove-button" onClick={() => removeHandler(blog)}><i className="bi bi-file-excel-fill"></i> Remove</Button>)
+              : null}</td>
+          </tr>
+        </tbody>
+
+      </Table>
+      <Button id="back-button" variant="secondary" onClick={backHandler}>Back</Button>
     </div>
   )
 }

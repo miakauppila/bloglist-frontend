@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import blogService from '../services/blogs'
 import { createBlogAction } from '../reducers/blogReducer'
 import { notificationAction } from '../reducers/notificationReducer'
+import { Form, Row, Button, Col } from 'react-bootstrap'
 
 const NewBlogForm = (props) => {
   const [newBlog, setNewBlog] = useState({
@@ -12,7 +13,7 @@ const NewBlogForm = (props) => {
   })
 
   const handleChange = (event) => {
-    setNewBlog({ ...newBlog, [event.target.name]: event.target.value })
+    setNewBlog({ ...newBlog, [event.target.id]: event.target.value })
   }
 
   const dispatch = useDispatch()
@@ -35,47 +36,52 @@ const NewBlogForm = (props) => {
     }
     catch (error) {
       console.log('Create new blog error:', error)
-      dispatch(notificationAction('Please fill in complete blog data', 'error'))
+      dispatch(notificationAction('Sorry, adding the blog failed.', 'danger'))
     }
   }
 
   return (
     <div>
-      <h2>Create new</h2>
+      <h3>Create new</h3>
       <div className="createBlogForm">
-        <form onSubmit={handleCreateNew}>
-          <div>
-                    title
-            <input
-              type="text"
-              value={newBlog.title}
-              id="title"
-              name="title"
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-                    author
-            <input
-              type="text"
-              value={newBlog.author}
-              id="author"
-              name="author"
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-                    url
-            <input
-              type="text"
-              value={newBlog.url}
-              id="url"
-              name="url"
-              onChange={handleChange}
-            />
-          </div>
-          <button type="submit" id="create-button">Create</button>
-        </form>
+        <Form onSubmit={handleCreateNew}>
+          <Form.Group as={Row} controlId="title">
+            <Form.Label column sm="2">title:</Form.Label>
+            <Col sm="10">
+              <Form.Control
+                type="text"
+                value={newBlog.title}
+                onChange={handleChange}
+                required
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} controlId="author">
+            <Form.Label column sm="2">author:</Form.Label>
+            <Col sm="10">
+              <Form.Control
+                type="text"
+                value={newBlog.author}
+                onChange={handleChange}
+                required
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} controlId="url">
+            <Form.Label column sm="2">url:</Form.Label>
+            <Col sm="10">
+              <Form.Control
+                type="text"
+                value={newBlog.url}
+                onChange={handleChange}
+                required
+              />
+            </Col>
+          </Form.Group>
+          <Button className="float-left" type="submit" id="create-button">
+           Create
+          </Button>
+        </Form>
 
       </div>
 

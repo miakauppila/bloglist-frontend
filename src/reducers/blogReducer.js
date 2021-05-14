@@ -37,7 +37,7 @@ export const initializeBlogsAction = () => {
     }
     catch (exception) {
       console.log(exception)
-      dispatch(notificationAction('Loading blogs failed, sorry!', 'error', 10))
+      dispatch(notificationAction('Sorry, connection error!', 'danger', 10))
     }
   }
 }

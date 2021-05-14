@@ -24,7 +24,7 @@ export const initializeUsersAction = () => {
     }
     catch (exception) {
       console.log(exception)
-      dispatch(notificationAction('Loading users failed, sorry!', 'error', 10))
+      dispatch(notificationAction('Sorry, connection error!', 'danger', 10))
     }
   }
 }

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { setLoggedUserAction } from '../reducers/loggedReducer'
 import loginService from '../services/login'
 import { notificationAction } from '../reducers/notificationReducer'
+import { Form, Button } from 'react-bootstrap'
 import Notification from './Notification'
 
 const LoginForm = () => {
@@ -29,35 +30,34 @@ const LoginForm = () => {
       dispatch(notificationAction('Login success', 'success'))
     } catch (error) {
       console.log(error.response.data)
-      dispatch(notificationAction('Wrong credentials', 'error'))
+      dispatch(notificationAction('Wrong credentials', 'danger'))
     }
   }
 
   return (
-    <div className="login-page">
+    <div className="container">
       <h2>Log in to application</h2>
       <Notification />
-      <form id="login" onSubmit={handleLogin}>
-        <div>
-        username
-          <input
-            type="text"
+      <Form id="login" onSubmit={handleLogin}>
+        <Form.Group controlId="username">
+          <Form.Label>username:</Form.Label>
+          <Form.Control type="text"
             value={username}
-            id="username"
             onChange={({ target }) => setUsername(target.value)}
+            required
           />
-        </div>
-        <div>
-        password
-          <input
+        </Form.Group>
+        <Form.Group controlId="password">
+          <Form.Label>password:</Form.Label>
+          <Form.Control
             type="password"
             value={password}
-            id="password"
             onChange={({ target }) => setPassword(target.value)}
+            required
           />
-        </div>
-        <button type="submit" id="login-button">login</button>
-      </form>
+        </Form.Group>
+        <Button variant="primary" type="submit" id="login-button">login</Button>
+      </Form>
     </div>
   )
 }

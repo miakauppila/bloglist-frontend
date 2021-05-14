@@ -1,18 +1,20 @@
 import React, { useEffect } from 'react'
 import LoginForm from './components/LoginForm'
-import NewBlogForm from './components/NewBlogForm'
 import Users from './components/Users'
 import blogService from './services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoggedUserAction, removeLoggedUserAction } from './reducers/loggedReducer'
+import { setLoggedUserAction } from './reducers/loggedReducer'
 import { initializeBlogsAction } from './reducers/blogReducer'
 import { initializeUsersAction } from './reducers/userReducer'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link
+  Switch, Route
 } from 'react-router-dom'
 import Bloglist from './components/Bloglist'
 import Blog from './components/Blog'
+import Navigation from './components/Navigation'
+import Footer from './components/Footer'
+import { Container } from 'react-bootstrap'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -40,49 +42,35 @@ const App = () => {
     }
   }, [])
 
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogAppUser')
-    dispatch(removeLoggedUserAction())
-  }
-
-  const padding = {
-    padding: 5
-  }
-
-  if (loggedUser === null) {
-    return (
-      <LoginForm />
-    )
-  }
+  // if (loggedUser === null) {
+  //   return (
+  //     <LoginForm />
+  //   )
+  // }
 
   return (
     <div>
-
       <Router>
-        <div>
-          <Link style={padding} to="/">blogs</Link>
-          <Link style={padding} to="/users">users</Link>
-          {loggedUser.name} logged in <button onClick={handleLogout}>logout</button>
-        </div>
-
-        <h2>blog app</h2>
-
-        <Switch>
-          <Route path="/blogs/:id">
-            <Blog />
-          </Route>
-          <Route path="/new">
-            <NewBlogForm />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            <Bloglist />
-          </Route>
-        </Switch>
-
+        <Navigation />
+        <Container>
+          {loggedUser === null? <LoginForm />
+            : (
+              <Switch>
+                <Route path="/blogs/:id">
+                  <Blog />
+                </Route>
+                <Route path="/users">
+                  <Users />
+                </Route>
+                <Route path="/">
+                  <Bloglist />
+                </Route>
+              </Switch>
+            )
+          }
+        </Container>
       </Router>
+      <Footer />
     </div>
   )
 }

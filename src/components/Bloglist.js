@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Notification from './Notification'
 import Togglable from './Togglable'
 import NewBlogForm from './NewBlogForm'
+import { Table } from 'react-bootstrap'
 
 const Bloglist = () => {
 
@@ -11,24 +12,34 @@ const Bloglist = () => {
   const blogs = useSelector(state => state.blogs)
 
   // used for linking with Togglable
-  const blogFormRef = useRef()
+  const newBlogFormRef = useRef()
 
   // sort blogs by amount of likes
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
+
   return (
     <div>
+      <h2>Blogs</h2>
       <Notification />
-      <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
+      <Togglable buttonLabel='Add new' ref={newBlogFormRef}>
         {/* NewBlogForm becomes the children of Togglable (show/hide) */}
-        <NewBlogForm togglableRef={blogFormRef} />
+        <NewBlogForm togglableRef={newBlogFormRef} />
       </Togglable>
-      <ul className="blog-list">
-        {sortedBlogs.map(blog =>
-          <li className="blog-link" key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-          </li>
-        )}
-      </ul>
+
+      <Table striped className="blog-table">
+        <tbody>
+          {sortedBlogs.map(blog =>
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </td>
+              <td>
+                {blog.author}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }
