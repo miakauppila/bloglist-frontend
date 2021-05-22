@@ -45,7 +45,7 @@ const Navigation = () => {
           </Nav>
           <Navbar.Text className="mr-4">{loggedUser.name} logged in</Navbar.Text>
           <div className="d-sm-inline-flex">
-            <Button className="btn-block" variant="light" onClick={handleLogout}>logout</Button>
+            <Button className="btn-block" variant="light" onClick={handleLogout}>logout <i className="bi bi-box-arrow-right"></i></Button>
           </div>
         </Navbar.Collapse>
       </Container>

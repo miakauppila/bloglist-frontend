@@ -21,7 +21,7 @@ const Bloglist = () => {
     <div>
       <h2>Blogs</h2>
       <Notification />
-      <Togglable buttonLabel='Add new' ref={newBlogFormRef}>
+      <Togglable icon='bi bi-plus-circle' buttonLabel='Add new' ref={newBlogFormRef}>
         {/* NewBlogForm becomes the children of Togglable (show/hide) */}
         <NewBlogForm togglableRef={newBlogFormRef} />
       </Togglable>

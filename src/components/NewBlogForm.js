@@ -79,7 +79,8 @@ const NewBlogForm = (props) => {
             </Col>
           </Form.Group>
           <Button className="float-left" type="submit" id="create-button">
-           Create
+            <i className="bi bi-save2"></i>
+            {' '}Create
           </Button>
         </Form>
 
