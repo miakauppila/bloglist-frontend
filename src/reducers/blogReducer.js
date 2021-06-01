@@ -20,6 +20,13 @@ const blogReducer = (state = initialState, action) => {
     const id = action.payload
     return state.filter(blog => blog.id !== id)
   }
+  case 'COMMENT_BLOG': {
+    const id = action.payload.id
+    const commentedBlog = action.payload
+    return state.map(blog =>
+      blog.id !== id ? blog : { ...blog, comments: commentedBlog.comments }
+    )
+  }
   default:
     return state
   }
@@ -60,6 +67,13 @@ export const removeBlogAction = (id) => {
   return {
     type: 'REMOVE_BLOG',
     payload: id
+  }
+}
+
+export const commentBlogAction = (blogObj) => {
+  return {
+    type: 'COMMENT_BLOG',
+    payload: blogObj
   }
 }
 

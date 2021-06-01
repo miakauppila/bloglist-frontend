@@ -1,11 +1,11 @@
 import React from 'react'
 import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlogAction, removeBlogAction } from '../reducers/blogReducer'
+import { likeBlogAction, removeBlogAction, commentBlogAction } from '../reducers/blogReducer'
 import { notificationAction } from '../reducers/notificationReducer'
 import { useParams, useHistory } from 'react-router-dom'
 import Notification from './Notification'
-import { Table, Button } from 'react-bootstrap'
+import { Table, Button, Form, Row, Col } from 'react-bootstrap'
 
 
 const Blog = () => {
@@ -19,6 +19,7 @@ const Blog = () => {
 
   const blogId = useParams().id
   const blog = blogs.find(blog => blog.id === blogId)
+  //console.log('Render blog', blog)
 
   const updateBlog = async (blogObject) => {
     const changedBlog = {
@@ -58,6 +59,25 @@ const Blog = () => {
     }
   }
 
+  const commentHandler = async (event) => {
+    event.preventDefault()
+    const comment = event.target.comment.value
+    // reset form's content
+    event.target.reset()
+    // convert into obj for axios post
+    const commentObj = { content: comment }
+    try {
+      const commentedBlog = await blogService.addComment(blogId, commentObj)
+      console.log(commentedBlog)
+      dispatch(commentBlogAction(commentedBlog))
+      dispatch(notificationAction('Comment added', 'success'))
+    }
+    catch (error) {
+      console.log('Comment blog error:', error)
+      dispatch(notificationAction('Sorry, adding comments failed.', 'danger'))
+    }
+  }
+
   const history = useHistory()
   const backHandler = () => {
     history.push('/')
@@ -68,7 +88,7 @@ const Blog = () => {
   }
 
   return (
-    <div className="blog">
+    <div className="blog mb-4">
       <h2>{blog.title} by {blog.author}</h2>
       <Notification />
       <Table className="blog-table">
@@ -103,9 +123,33 @@ const Blog = () => {
               : null}</td>
           </tr>
         </tbody>
-
       </Table>
-      <Button id="back-button" variant="secondary" onClick={backHandler}>Back</Button>
+      <h3>Comments</h3>
+      <Form id="comment-form" onSubmit={commentHandler}>
+        <Form.Group as={Row} controlId="comment">
+          <Col md="9" className="mb-2">
+            <Form.Label srOnly={true}>Comment</Form.Label>
+            <Form.Control type="text"
+              name="comment"
+              placeholder="Leave your comment"
+              required />
+          </Col>
+          <Col md="auto">
+            <Button variant="outline-primary"
+              type="submit"
+              id="comment-button">
+              <i className="bi bi-chat-square-text-fill"></i>
+            Add comment
+            </Button>
+          </Col>
+        </Form.Group>
+      </Form>
+      {blog.comments.map((comment) =>
+        <li key={comment.id}>{comment.content}</li>
+      )}
+      <div className="mt-3">
+        <Button id="back-button" variant="secondary" onClick={backHandler}>Back</Button>
+      </div>
     </div>
   )
 }
