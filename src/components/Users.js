@@ -14,7 +14,7 @@ const Users = () => {
   }
 
   return (
-    <div>
+    <div className="users mb-4">
       <h2>Users</h2>
       <Table striped className="user-table">
         <thead>

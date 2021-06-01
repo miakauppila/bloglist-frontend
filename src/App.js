@@ -42,14 +42,8 @@ const App = () => {
     }
   }, [])
 
-  // if (loggedUser === null) {
-  //   return (
-  //     <LoginForm />
-  //   )
-  // }
-
   return (
-    <div>
+    <div className="App">
       <Router>
         <Navigation />
         <Container>

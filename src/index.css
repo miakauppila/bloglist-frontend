@@ -1,10 +1,22 @@
+html, body, #root {
+  min-height: 100vh;
+}
+
+
+ /* Flex enables sticky footer */
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 h2 {
   margin-top: 20px;
 }
 
 table {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px !important;
   border-bottom: 1px solid #dee2e6;
 }
 .blog-table th {
@@ -15,16 +27,10 @@ th {
   text-align: left;
 }
 
-body {
-  /* Margin bottom by footer height+margin to keep it in place */
-  margin-bottom: 80px;
-}
 .footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
   width: 100%;
-  height: 60px; /* Set the fixed height of the footer here */
-  line-height: 60px; /* Vertically center the text there */
+  margin-top: auto; /* Pushes the footer down */
+  height: 60px; /* Footer has a fixed height */
+  line-height: 60px; /* Vertically center the footer text */
   background-color: #dcedfd;
 }
