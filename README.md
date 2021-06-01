@@ -1,6 +1,6 @@
 # Bloglist frontend
 
-- Part 5 of the Full Stack Open course
+- Part 5 & 7 of the Full Stack Open course
 
 - This repo holds the frontend of the Bloglist app.
 
@@ -8,7 +8,9 @@
 <br>
 
 ## Technologies used in this project:
-- React.js, PropTypes, Axios
+- React.js, Axios  
+- React Router, Redux, Redux Thunk  
+- React Bootsrap + Bootstrap
 - Jest & React Testing Library for unit testing
 - Cypress for end-to-end testing
 - ESLint
