@@ -110,7 +110,7 @@ const Blog = () => {
           </tr>
           <tr>
             <th>Likes:</th>
-            <td>{blog.likes}</td>
+            <td id="likes">{blog.likes}</td>
             <td><Button variant="outline-success" id="like-button" onClick={() => updateBlog(blog)}><i className="bi bi-heart-fill"></i> Like</Button></td>
           </tr>
           <tr>
@@ -129,13 +129,16 @@ const Blog = () => {
         <Form.Group as={Row} controlId="comment">
           <Col md="9" className="mb-2">
             <Form.Label srOnly={true}>Comment</Form.Label>
-            <Form.Control type="text"
+            <Form.Control
+              type="text"
+              id="comment"
               name="comment"
               placeholder="Leave your comment"
               required />
           </Col>
           <Col md="auto">
-            <Button variant="outline-primary"
+            <Button
+              variant="outline-primary"
               type="submit"
               id="comment-button">
               <i className="bi bi-chat-square-text-fill"></i>

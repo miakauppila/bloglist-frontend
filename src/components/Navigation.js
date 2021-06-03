@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { removeLoggedUserAction } from '../reducers/loggedReducer'
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, Button, Container } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
 const Navigation = () => {
   const dispatch = useDispatch()
@@ -10,8 +11,11 @@ const Navigation = () => {
   // Redux store: user saved after login success
   const loggedUser = useSelector(state => state.loggedUser)
 
+  const history = useHistory()
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
+    history.push('/')
     dispatch(removeLoggedUserAction())
   }
 
@@ -45,7 +49,13 @@ const Navigation = () => {
           </Nav>
           <Navbar.Text className="mr-4">{loggedUser.name} logged in</Navbar.Text>
           <div className="d-sm-inline-flex">
-            <Button className="btn-block" variant="light" onClick={handleLogout}>logout <i className="bi bi-box-arrow-right"></i></Button>
+            <Button
+              id="logout-button"
+              className="btn-block"
+              variant="light"
+              onClick={handleLogout}
+            >logout <i className="bi bi-box-arrow-right"></i>
+            </Button>
           </div>
         </Navbar.Collapse>
       </Container>

@@ -26,8 +26,8 @@ const Users = () => {
         <tbody>
           {users.map(user =>
             <tr key={user.id}>
-              <td> {user.name} </td>
-              <td>{user.blogs.length}</td>
+              <td id="user-name"> {user.name} </td>
+              <td id="user-blogs">{user.blogs.length}</td>
             </tr>
           )}
         </tbody>
