@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import { useDispatch, useSelector } from 'react-redux'
 import { likeBlogAction, removeBlogAction, commentBlogAction } from '../reducers/blogReducer'
@@ -9,6 +9,13 @@ import { Table, Button, Form, Row, Col } from 'react-bootstrap'
 
 
 const Blog = () => {
+
+  // comment form state
+  const [comment, setComment] = useState('')
+
+  const handleChange = (event) => {
+    setComment(event.target.value)
+  }
 
   // Redux store: user saved after login success
   const user = useSelector(state => state.loggedUser)
@@ -61,9 +68,7 @@ const Blog = () => {
 
   const commentHandler = async (event) => {
     event.preventDefault()
-    const comment = event.target.comment.value
-    // reset form's content
-    event.target.reset()
+    setComment('')
     // convert into obj for axios post
     const commentObj = { content: comment }
     try {
@@ -131,8 +136,8 @@ const Blog = () => {
             <Form.Label srOnly={true}>Comment</Form.Label>
             <Form.Control
               type="text"
-              id="comment"
-              name="comment"
+              value={comment}
+              onChange={handleChange}
               placeholder="Leave your comment"
               required />
           </Col>

@@ -3,19 +3,38 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import { prettyDOM } from '@testing-library/dom'
 import NewBlogForm from './NewBlogForm'
+import { Provider } from 'react-redux'
+import blogService from '../services/blogs'
+import store from '../store'
 
 describe('<NewBlogForm />', () => {
+  let component
 
-  test('Props function should be called with values of form input fields when pressing the Create button', () => {
+  beforeEach(() => {
 
-    // mock fn that is called by pressing the Create button
-    const mockHandler = jest.fn()
-
-    const component = render(
-      <NewBlogForm createNewBlog={mockHandler} />
+    component = render(<Provider store={store}>
+      <NewBlogForm />
+    </Provider>
     )
+  })
 
-    // fire change events to update the values of the input fields
+  test('Form submit works', () => {
+
+    const form = component.container.querySelector('form')
+
+    // mock fn that must be called by submitting the form
+    const createMockHandler = jest.fn()
+    form.onsubmit = createMockHandler
+
+    //fire event to submit the form
+    fireEvent.submit(form)
+    expect(createMockHandler.mock.calls).toHaveLength(1)
+    createMockHandler.mockReset()
+  })
+
+  test('Axios create spy should be called with values of form inputs when form is submitted', () => {
+
+    // fire change events of input fields (values go into state)
     const title = component.container.querySelector('#title')
     fireEvent.change(title, { target: { value: 'Blogtest' } })
 
@@ -26,17 +45,18 @@ describe('<NewBlogForm />', () => {
     fireEvent.change(url, { target: { value: 'www.blog.com' } })
 
     // use PrettyDom to print HTML to console => values should be filled now
-    const div = component.container.querySelector('.createBlogForm')
-    console.log(prettyDOM(div))
+    //const div = component.container.querySelector('.createBlogForm')
+    //console.info(prettyDOM(div))
 
-    //fire event to submit the form with Create button
-    const submitButton = component.getByText('Create')
-    fireEvent.click(submitButton)
+    const axiosSpy = jest.spyOn(blogService, 'create').mockReturnValue({})
+    const form = component.container.querySelector('form')
 
-    expect(mockHandler.mock.calls).toHaveLength(1)
-    // mockHandler fn should be called with new blog object (3 input values)
-    expect(mockHandler).toHaveBeenCalledWith({ 'author': 'Writer', 'title': 'Blogtest', 'url': 'www.blog.com' })
+    //fire event to submit the form
+    fireEvent.submit(form)
 
+    expect(axiosSpy).toHaveBeenCalledTimes(1)
+    // axiosSpy fn should be called with new blog object (3 input values coming from state)
+    expect(axiosSpy).toHaveBeenCalledWith({ 'author': 'Writer', 'title': 'Blogtest', 'url': 'www.blog.com' })
   })
 
 })
