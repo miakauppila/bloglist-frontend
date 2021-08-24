@@ -1,8 +1,15 @@
 # Bloglist frontend
 
-- Part 5 & 7 of the Full Stack Open course
+- Parts 5 and 7 of the Full Stack Open course
 
-- This repo holds the frontend of the Bloglist app.
+- This repository holds the frontend of the Bloglist App.  
+
+- The app has the following properties:  
+    - user log in/out  
+    - show all blogs  
+    - add a new blog
+    - like a blog, comment a blog
+    - delete a blog (available for the user who originally created the blog)
 
 - <a href="https://github.com/miakauppila/bloglist-backend" target="_blank">Click here for the backend repo of this app</a>
 <br>
