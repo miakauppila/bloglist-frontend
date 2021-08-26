@@ -4,6 +4,8 @@
 
 - This repository holds the frontend of the Bloglist App.  
 
+- Backend runs separately. <a href="https://github.com/miakauppila/bloglist-backend" target="_blank">Click here for the backend repo of this app</a>
+
 - The app has the following properties:  
     - user log in/out  
     - show all blogs  
@@ -11,8 +13,12 @@
     - like a blog, comment a blog
     - delete a blog (available for the user who originally created the blog)
 
-- <a href="https://github.com/miakauppila/bloglist-backend" target="_blank">Click here for the backend repo of this app</a>
-<br>
+## This application runs online at
+https://greatblogsapp.heroku.com
+
+- You can test it with these credentials:  
+    - username: testuser  
+    - password: testing!  
 
 ## Technologies used in this project:
 - React.js, Axios  
