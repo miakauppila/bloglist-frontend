@@ -6,6 +6,7 @@ import { notificationAction } from '../reducers/notificationReducer'
 import { useParams, useHistory } from 'react-router-dom'
 import Notification from './Notification'
 import { Table, Button, Form, Row, Col } from 'react-bootstrap'
+import { blogRemovedByUserAction } from '../reducers/userReducer'
 
 
 const Blog = () => {
@@ -56,6 +57,7 @@ const Blog = () => {
       try {
         await blogService.remove(blog.id)
         dispatch(removeBlogAction(blog.id))
+        dispatch(blogRemovedByUserAction(blog))
         dispatch(notificationAction('Blog was removed', 'success'))
         history.push('/')
       }

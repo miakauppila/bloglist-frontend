@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import blogService from '../services/blogs'
 import { createBlogAction } from '../reducers/blogReducer'
+import { newBlogByUserAction } from '../reducers/userReducer'
 import { notificationAction } from '../reducers/notificationReducer'
 import { Form, Row, Button, Col } from 'react-bootstrap'
 
@@ -30,7 +31,8 @@ const NewBlogForm = (props) => {
       const createdBlog = await blogService.create(newBlog)
       console.log('blog created:', createdBlog)
       dispatch(createBlogAction(createdBlog))
-      // access Togglable function via ref
+      dispatch(newBlogByUserAction(createdBlog))
+      // access Togglable function via ref to close the form
       props.togglableRef.current.toggleVisibility()
       dispatch(notificationAction(`A new blog ${createdBlog.title} by ${createdBlog.author} added`, 'success'))
     }
