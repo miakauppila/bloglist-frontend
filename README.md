@@ -14,7 +14,7 @@
     - delete a blog (available for the user who originally created the blog)
 
 ## This application runs online at
-https://greatblogsapp.heroku.com
+https://greatblogsapp.herokuapp.com
 
 - You can test it with these credentials:  
     - username: testuser  
